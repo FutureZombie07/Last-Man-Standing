@@ -19,6 +19,8 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         this.setLayout(null);
         this.setResizable(false);
 
+        Controller.registerKeyboardListener();
+
         JPanel titleScreen = new JPanel();
         titleScreen.setBounds(0,0,1280,720);
         titleScreen.setLayout(null);
@@ -57,12 +59,22 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         CharacterSelectionView p1View = new CharacterSelectionView(30,18, characterViewWidth, characterViewHeight, images);
         views[0] =p1View;
         characterSelectionScreen.add(p1View);
+
+        CharacterSelectionView p2View = new CharacterSelectionView(830,18, characterViewWidth, characterViewHeight, images);
+        views[1] =p2View;
+        characterSelectionScreen.add(p2View);
+
+        CharacterSelectionView p3View = new CharacterSelectionView(26,387, characterViewWidth, characterViewHeight, images);
+        views[2] =p3View;
+        characterSelectionScreen.add(p3View);
+
+        CharacterSelectionView p4View = new CharacterSelectionView(836,387, characterViewWidth, characterViewHeight, images);
+        views[3] =p4View;
+        characterSelectionScreen.add(p4View);
         //TODO: add 3 more views
 
-
-
         JButton startButton = new JButton("<html><div style=\"text-align:center;\">Begin (of doom)</div></html>");
-        startButton.setBounds(500,310,200,100);
+        startButton.setBounds(545,310,200,100);
         startButton.setBackground(new Color(0,0,0));
         startButton.setForeground(new Color(255,255,255));
         startButton.setFocusPainted(false);
@@ -91,7 +103,7 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     }
 
     //legacy functions
-    public static void sayPlayerAction(TestPlayerClass player){System.out.println(player+" pulled lever: "+player.isLeverPulled());}
+    public static void sayPlayerAction(PlayerClass player){System.out.println(player+" pulled lever: "+player.isLeverPulled());}
 
     //"Rotates" the squasher
     public static void rotate(int x){
@@ -99,7 +111,7 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     }
 
     //Says who was squashed
-    public static void squash(TestPlayerClass player){System.out.println(player+" was squashed...");}
+    public static void squash(PlayerClass player){System.out.println(player+" was squashed...");}
 }
 
 
