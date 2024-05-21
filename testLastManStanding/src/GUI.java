@@ -7,35 +7,35 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
 
     String[] imagepaths = new String[]{"assets/lastManStandingBG.png", "assets/titlescreenImage.png"};
     ArrayList<ImageIcon> images = new ArrayList<>();
-    Font bestFont = new Font("Monospaced", Font.PLAIN, 24);
+    static Font bestFont = new Font("Monospaced", Font.PLAIN, 24);
     ImageIcon background = new ImageIcon(this.getClass().getResource("assets/titlescreenImage.png"));
+    ImageIcon background2 = new ImageIcon(this.getClass().getResource("assets/characterSelectionScreenTemplate.png"));
+    final int characterViewWidth = 402;
+    final int characterViewHeight = 280;
     public GUI() {
         super("Last Man Standing");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(900, 600);
+        this.setSize(1280, 720);
         this.setLayout(null);
         this.setResizable(false);
 
         JPanel titleScreen = new JPanel();
-        titleScreen.setBounds(0,-16,900,600);
+        titleScreen.setBounds(0,0,1280,720);
         titleScreen.setLayout(null);
         this.add(titleScreen);
 
         for (String i : imagepaths) {
-            images.add(new ImageIcon(this.getClass().getResource(i)));
+            images.add(new ImageIcon(new ImageIcon(this.getClass().getResource(i)).getImage().getScaledInstance((int) (characterViewWidth*0.8 + 1), characterViewHeight, Image.SCALE_DEFAULT)));
         }
 
         JPanel characterSelectionScreen = new JPanel();
-        characterSelectionScreen.setBounds(0,0,900,600);
+        characterSelectionScreen.setBounds(0,0,1280,720);
         characterSelectionScreen.setLayout(null);
 
-        JLabel backgroundImage = new JLabel();
-        backgroundImage.setBounds(0,0,900,600);
-        backgroundImage.setIcon(background);
-        titleScreen.add(backgroundImage);
+
 
         JButton startGameButton = new JButton("<html><div style=\"text-align:center;\">Start Game (of doom)</div></html>");
-        startGameButton.setBounds(350,325,200,75);
+        startGameButton.setBounds(535,400,200,75);
         startGameButton.setBackground(new Color(0,0,0));
         startGameButton.setForeground(new Color(255,255,255));
         startGameButton.setFocusPainted(false);
@@ -48,18 +48,35 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         });
         titleScreen.add(startGameButton);
 
+        JLabel backgroundImage = new JLabel();
+        backgroundImage.setBounds(0,0,1280,720);
+        backgroundImage.setIcon(background);
+        titleScreen.add(backgroundImage);
 
-
-        JLabel testingText = new JLabel("testing");
-        testingText.setBounds(0,0,10,10);
-        characterSelectionScreen.add(testingText);
-
-        CharacterSelectionView p1View = new CharacterSelectionView(100,25, 300, 300, images);
-
+        CharacterSelectionView[] views = new CharacterSelectionView[4];
+        CharacterSelectionView p1View = new CharacterSelectionView(30,18, characterViewWidth, characterViewHeight, images);
+        views[0] =p1View;
         characterSelectionScreen.add(p1View);
+        //TODO: add 3 more views
 
 
 
+        JButton startButton = new JButton("<html><div style=\"text-align:center;\">Begin (of doom)</div></html>");
+        startButton.setBounds(500,310,200,100);
+        startButton.setBackground(new Color(0,0,0));
+        startButton.setForeground(new Color(255,255,255));
+        startButton.setFocusPainted(false);
+        startButton.setFont(bestFont);
+        startButton.addActionListener(e -> {
+            Controller.startButton(views);
+        });
+        characterSelectionScreen.add(startButton);
+
+
+        JLabel backgroundImage2 = new JLabel();
+        backgroundImage2.setBounds(-12,-16,1280,720);
+        backgroundImage2.setIcon(background2);
+        characterSelectionScreen.add(backgroundImage2);
         this.setVisible(true);
     }
     //Temporary main function to test the GUI
@@ -74,14 +91,15 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     }
 
     //legacy functions
-    public static void sayPlayerAction(PlayerClass player){System.out.println(player.getName()+" pulled lever: "+player.isLeverPulled());}
+    public static void sayPlayerAction(TestPlayerClass player){System.out.println(player+" pulled lever: "+player.isLeverPulled());}
 
     //"Rotates" the squasher
     public static void rotate(int x){
-        System.out.println("The squasher has rotated "+x+" times.");
+        System.out.println("The squaser has rotated "+x+" times.");
     }
 
     //Says who was squashed
-    public static void squash(PlayerClass player){System.out.println(player.getName()+" was squashed...");}
+    public static void squash(TestPlayerClass player){System.out.println(player+" was squashed...");}
 }
+
 
