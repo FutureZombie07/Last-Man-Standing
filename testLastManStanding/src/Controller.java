@@ -21,6 +21,7 @@ public class Controller {
         };
         GameLoop gameLoop = new GameLoop(players);
         Controller.gameLoop = gameLoop;
+        Controller.registerKeyboardListener();
     }
 
     public static void registerKeyboardListener() {
@@ -28,11 +29,24 @@ public class Controller {
             for (PlayerClass player: Controller.gameLoop.getPlayers()) {
                 if (e.getKeyChar() == player.getYes()) {
                     player.setLeverPulled(true);
+                    player.setSelected(true);
                 } else if (e.getKeyChar() == player.getNo()) {
                     player.setLeverPulled(false);
+                    player.setSelected(true);
                 }
             }
+            for (PlayerClass player : Controller.gameLoop.getPlayers()) {
+                if (!player.isSelected()) {
+                    return false;
+                }
+            }
+            new Notifier();
             return false;
         });
     }
+
+    public static GameLoop getGameLoop() {
+        return Controller.gameLoop;
+    }
+
 }

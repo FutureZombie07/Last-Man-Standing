@@ -68,7 +68,7 @@ public class CharacterSelectionView extends JPanel {
 
     }
     public ImageIcon getCurrentImage() {
-        return this.images.get(index);
+        return new ImageIcon(this.images.get(index).getImage().getScaledInstance(100,100, Image.SCALE_DEFAULT));
     }
 
     public String getName() {

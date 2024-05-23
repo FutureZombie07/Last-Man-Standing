@@ -4,14 +4,18 @@ import java.util.ArrayList;
 
 public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     //Code to display - Will be shifted to updating something on the GUI
-
+    //TODO: make animateevents function that is threaded and animates everything
     String[] imagepaths = new String[]{"assets/lastManStandingBG.png", "assets/titlescreenImage.png"};
     ArrayList<ImageIcon> images = new ArrayList<>();
     static Font bestFont = new Font("Monospaced", Font.PLAIN, 24);
     ImageIcon background = new ImageIcon(this.getClass().getResource("assets/titlescreenImage.png"));
     ImageIcon background2 = new ImageIcon(this.getClass().getResource("assets/characterSelectionScreenTemplate.png"));
+
+    ImageIcon backgroundIngame = new ImageIcon(this.getClass().getResource("assets/lastManStandingBG.png"));
     final int characterViewWidth = 402;
     final int characterViewHeight = 280;
+
+    JPanel ingameScreen;
     public GUI() {
         super("Last Man Standing");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -19,7 +23,9 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         this.setLayout(null);
         this.setResizable(false);
 
-        Controller.registerKeyboardListener();
+        ingameScreen = new JPanel();
+        ingameScreen.setBounds(0,0,1280,720);
+        ingameScreen.setLayout(null);
 
         JPanel titleScreen = new JPanel();
         titleScreen.setBounds(0,0,1280,720);
@@ -81,6 +87,11 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         startButton.setFont(bestFont);
         startButton.addActionListener(e -> {
             Controller.startButton(views);
+            this.redrawEverything();
+            remove(characterSelectionScreen);
+            add(ingameScreen);
+            repaint();
+            revalidate();
         });
         characterSelectionScreen.add(startButton);
 
@@ -89,8 +100,42 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         backgroundImage2.setBounds(-12,-16,1280,720);
         backgroundImage2.setIcon(background2);
         characterSelectionScreen.add(backgroundImage2);
+
+
+        this.redrawEverything();
+
+
         this.setVisible(true);
     }
+
+    public void redrawEverything() {
+        this.ingameScreen.removeAll();
+        if (Controller.getGameLoop() != null) {
+            if (!Controller.getGameLoop().getPlayers()[0].isSquashed()) {
+                PlayerClass player = Controller.getGameLoop().getPlayers()[0];
+                JLabel playerLabel = new JLabel();
+                playerLabel.setBounds(200,400,100,100);
+                playerLabel.setIcon(player.getPlayerImage());
+                this.ingameScreen.add(playerLabel);
+
+                JLabel isSelectedLabel = new JLabel();
+                isSelectedLabel.setBounds(300,500,50,50);
+                isSelectedLabel.setText("TESTING ONE TEW");
+                this.ingameScreen.add(isSelectedLabel);
+            }
+        }
+
+        JLabel backgroundImageIngame = new JLabel();
+        backgroundImageIngame.setBounds(0,0,1280,720);
+        backgroundImageIngame.setIcon(backgroundIngame);
+        this.ingameScreen.add(backgroundImageIngame);
+
+
+
+        repaint();
+        revalidate();
+    }
+
     //Temporary main function to test the GUI
     public static void main(String[] args) {
         try {

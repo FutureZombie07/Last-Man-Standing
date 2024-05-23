@@ -1,13 +1,15 @@
 import javax.swing.*;
 
 public class PlayerClass {//This class is a placeholder
-    private boolean leverPulled = false;
+    private Boolean leverPulled = null;
     private boolean squashed = false;
     private char yes = 'a';
     private char no = 'b';
     private String name = "";//Add code to set this to the name of the character they selected
     private boolean bot = false;
     private ImageIcon playerImage;
+
+    private boolean selected = false;
 
 
     //-----C O N S T R U C T O R S-----\\
@@ -51,4 +53,20 @@ public class PlayerClass {//This class is a placeholder
 
     public boolean isBot() {return bot;}
     public void setBot(boolean bot) {this.bot = bot;}
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public ImageIcon getPlayerImage() {
+        return playerImage;
+    }
+
+    public void setPlayerImage(ImageIcon playerImage) {
+        this.playerImage = playerImage;
+    }
 }
