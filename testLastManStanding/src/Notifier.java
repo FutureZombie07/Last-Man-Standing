@@ -1,4 +1,4 @@
 public class Notifier {
-    public Notifier() {notifyAll();}
+    public Notifier() {notifyAll();}//Notifies the GameLoop & Animator classes
 
 }

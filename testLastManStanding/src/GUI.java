@@ -111,7 +111,7 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     public void redrawEverything() {
         this.ingameScreen.removeAll();
         if (Controller.getGameLoop() != null) {
-            if (!Controller.getGameLoop().getPlayers()[0].isSquashed()) {
+            if (!Controller.getGameLoop().getPlayers().get[0].isSquashed()) {
                 PlayerClass player = Controller.getGameLoop().getPlayers()[0];
                 JLabel playerLabel = new JLabel();
                 playerLabel.setBounds(200,400,100,100);
@@ -158,5 +158,4 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     //Says who was squashed
     public static void squash(PlayerClass player){System.out.println(player+" was squashed...");}
 }
-
 
