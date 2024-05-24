@@ -108,11 +108,11 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         this.setVisible(true);
     }
 
-    public void redrawEverything() {
+    public void redrawEverything() {//Updates screen according to the GameLoop
         this.ingameScreen.removeAll();
         if (Controller.getGameLoop() != null) {
-            if (!Controller.getGameLoop().getPlayers().get[0].isSquashed()) {
-                PlayerClass player = Controller.getGameLoop().getPlayers()[0];
+            if (!Controller.getGameLoop().getPlayers().get(0).isSquashed()) {
+                PlayerClass player = Controller.getGameLoop().getPlayers().get(0);
                 JLabel playerLabel = new JLabel();
                 playerLabel.setBounds(200,400,100,100);
                 playerLabel.setIcon(player.getPlayerImage());
