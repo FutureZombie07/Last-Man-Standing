@@ -1,4 +1,10 @@
 public class Notifier {
-    public Notifier() {notifyAll();}//Notifies the GameLoop & Animator classes
+
+    public static final Object notifier = new Object();
+    public Notifier() {
+        synchronized (notifier) {
+            notifier.notify();
+        }
+    }
 
 }

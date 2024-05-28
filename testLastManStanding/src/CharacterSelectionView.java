@@ -17,7 +17,7 @@ public class CharacterSelectionView extends JPanel {
         this.setOpaque(false);
 
         JLabel selectedImage = new JLabel();
-        selectedImage.setIcon(images.get(0));
+        selectedImage.setIcon(new ImageIcon(images.get(0).getImage().getScaledInstance((int) (GUI.characterViewWidth*0.8 + 1), GUI.characterViewHeight, Image.SCALE_DEFAULT)));
         selectedImage.setBounds((int) (0.1*w), 0, (int) (0.8*w), (int) (0.8*h));
         this.add(selectedImage);
 
@@ -33,7 +33,7 @@ public class CharacterSelectionView extends JPanel {
             if (this.index < 0) {
                 this.index = images.size()-1;
             }
-            selectedImage.setIcon(images.get(index));
+            selectedImage.setIcon(new ImageIcon(images.get(index).getImage().getScaledInstance((int) (GUI.characterViewWidth*0.8 + 1), GUI.characterViewHeight, Image.SCALE_DEFAULT)));
             repaint();
             revalidate();
         });
@@ -51,13 +51,13 @@ public class CharacterSelectionView extends JPanel {
             if (this.index == images.size()) {
                 this.index = 0;
             }
-            selectedImage.setIcon(images.get(index));
+            selectedImage.setIcon(new ImageIcon(images.get(index).getImage().getScaledInstance((int) (GUI.characterViewWidth*0.8 + 1), GUI.characterViewHeight, Image.SCALE_DEFAULT)));
             repaint();
             revalidate();
         });
         this.add(rightButton);
 
-        JTextField nameField = new JTextField("Name...");
+        JTextField nameField = new JTextField("Enter Name...");
         nameField.setBounds(0, (int) (0.8*h), w, (int) (0.2*h));
         nameField.setBackground(new Color(0,0,0));
         nameField.setForeground(new Color(255,255,255));
@@ -68,7 +68,7 @@ public class CharacterSelectionView extends JPanel {
 
     }
     public ImageIcon getCurrentImage() {
-        return new ImageIcon(this.images.get(index).getImage().getScaledInstance(100,100, Image.SCALE_DEFAULT));
+        return new ImageIcon(this.images.get(index).getImage().getScaledInstance(250,250, Image.SCALE_DEFAULT));
     }
 
     public String getName() {

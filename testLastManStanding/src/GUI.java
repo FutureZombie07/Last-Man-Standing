@@ -1,19 +1,29 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     //Code to display - Will be shifted to updating something on the GUI
     //TODO: make animateevents function that is threaded and animates everything
-    String[] imagepaths = new String[]{"assets/lastManStandingBG.png", "assets/titlescreenImage.png"};
+    String[] imagepaths = new String[]{"assets/characters/Wizard_Character.png", "assets/characters/planet_character.png", "assets/characters/muffin_Character.png", "assets/characters/Knight_Character.png"};
+
+    String[] numberpaths = new String[]{"assets/numbers/ZERO.png", "assets/numbers/ONE.png", "assets/numbers/TWO.png", "assets/numbers/THREE.png", "assets/numbers/FOUR.png", "assets/numbers/FIVE.png", "assets/numbers/SIX.png", "assets/numbers/SEVEN.png"};
     ArrayList<ImageIcon> images = new ArrayList<>();
+
+    ArrayList<ImageIcon> numbers = new ArrayList<>();
     static Font bestFont = new Font("Monospaced", Font.PLAIN, 24);
     ImageIcon background = new ImageIcon(this.getClass().getResource("assets/titlescreenImage.png"));
     ImageIcon background2 = new ImageIcon(this.getClass().getResource("assets/characterSelectionScreenTemplate.png"));
+    ImageIcon checkIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("assets/CHECKMARK.png")).getImage().getScaledInstance(100,100,Image.SCALE_DEFAULT));
 
-    ImageIcon backgroundIngame = new ImageIcon(this.getClass().getResource("assets/lastManStandingBG.png"));
-    final int characterViewWidth = 402;
-    final int characterViewHeight = 280;
+    ImageIcon smasherIcon = new ImageIcon(this.getClass().getResource("assets/squasher.png"));
+
+    ImageIcon xIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("assets/XMARK.png")).getImage().getScaledInstance(100,100,Image.SCALE_DEFAULT));
+
+    ImageIcon backgroundIngame = new ImageIcon(this.getClass().getResource("assets/newbackgroundimage.png"));
+    public static final int characterViewWidth = 402;
+    public static final int characterViewHeight = 280;
 
     JPanel ingameScreen;
     public GUI() {
@@ -33,7 +43,11 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         this.add(titleScreen);
 
         for (String i : imagepaths) {
-            images.add(new ImageIcon(new ImageIcon(this.getClass().getResource(i)).getImage().getScaledInstance((int) (characterViewWidth*0.8 + 1), characterViewHeight, Image.SCALE_DEFAULT)));
+            images.add(new ImageIcon(this.getClass().getResource(i)));
+        }
+
+        for (String i : numberpaths) {
+            numbers.add(new ImageIcon(new ImageIcon(this.getClass().getResource(i)).getImage().getScaledInstance(200,200, Image.SCALE_DEFAULT)));
         }
 
         JPanel characterSelectionScreen = new JPanel();
@@ -86,7 +100,7 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         startButton.setFocusPainted(false);
         startButton.setFont(bestFont);
         startButton.addActionListener(e -> {
-            Controller.startButton(views);
+            Controller.startButton(views, this);
             this.redrawEverything();
             remove(characterSelectionScreen);
             add(ingameScreen);
@@ -108,21 +122,132 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
         this.setVisible(true);
     }
 
-    public void redrawEverything() {//Updates screen according to the GameLoop
+    public void redrawEverything() {
         this.ingameScreen.removeAll();
         if (Controller.getGameLoop() != null) {
-            if (!Controller.getGameLoop().getPlayers().get(0).isSquashed()) {
-                PlayerClass player = Controller.getGameLoop().getPlayers().get(0);
+            //lever number
+            JLabel leverNumberLabel = new JLabel();
+            leverNumberLabel.setIcon(numbers.get(Animator.getCurrentSwitches()));
+            leverNumberLabel.setBounds(1080, 0, 200, 200);
+            this.ingameScreen.add(leverNumberLabel);
+
+            //smasher
+            JLabel smasherLabel = new JLabel();
+            smasherLabel.setIcon(new ImageIcon(this.smasherIcon.getImage().getScaledInstance(400,600,Image.SCALE_DEFAULT)));
+            smasherLabel.setSize(400,600);
+            switch (Animator.getCurrentGUISmasherPosition()) {
+                case 0:
+                    smasherLabel.setLocation(85,-350);
+                    break;
+                case 1:
+                    smasherLabel.setLocation(450,-425);
+                    break;
+                case 2:
+                    smasherLabel.setLocation(750,-300);
+                    break;
+                case 3:
+                    smasherLabel.setLocation(450,-350);
+                    break;
+                default:
+                    smasherLabel.setLocation(300,0);
+                    break;
+            }
+            if (Animator.isSmasherSmashing()) {
+                smasherLabel.setLocation(smasherLabel.getX(), smasherLabel.getY()+ 400);
+            }
+            this.ingameScreen.add(smasherLabel);
+            //player 4
+            if (!Controller.getGameLoop().getPlayers()[3].isSquashed()) {
+                PlayerClass player = Controller.getGameLoop().getPlayers()[3];
                 JLabel playerLabel = new JLabel();
-                playerLabel.setBounds(200,400,100,100);
+                playerLabel.setBounds(530,380,250,250);
                 playerLabel.setIcon(player.getPlayerImage());
                 this.ingameScreen.add(playerLabel);
 
                 JLabel isSelectedLabel = new JLabel();
-                isSelectedLabel.setBounds(300,500,50,50);
-                isSelectedLabel.setText("TESTING ONE TEW");
+                isSelectedLabel.setBounds(750,580,100,100);
+                if (player.isSelected()) {
+                    isSelectedLabel.setIcon(checkIcon);
+                } else {
+                    isSelectedLabel.setIcon(xIcon);
+                }
+
+                this.ingameScreen.add(isSelectedLabel);
+
+                JLabel playerNameLabel = new JLabel(player.getName());
+                playerNameLabel.setForeground(new Color(255, 255, 255));
+                playerNameLabel.setBackground(new Color(0, 0, 0));
+                playerNameLabel.setOpaque(true);
+                playerNameLabel.setFont(bestFont);
+                playerNameLabel.setBounds(550, 630, 200,40);
+                this.ingameScreen.add(playerNameLabel);
+
+            }
+            //player 1
+            if (!Controller.getGameLoop().getPlayers()[0].isSquashed()) {
+                PlayerClass player = Controller.getGameLoop().getPlayers()[0];
+                JLabel playerLabel = new JLabel();
+                playerLabel.setBounds(160,190,250,250);
+                playerLabel.setIcon(player.getPlayerImage());
+                this.ingameScreen.add(playerLabel);
+
+                JLabel isSelectedLabel = new JLabel();
+                isSelectedLabel.setBounds(135,550,100,100);
+                if (player.isSelected()) {
+                    isSelectedLabel.setIcon(checkIcon);
+                } else {
+                    isSelectedLabel.setIcon(xIcon);
+                }
+
+                this.ingameScreen.add(isSelectedLabel);
+
+                JLabel playerNameLabel = new JLabel(player.getName());
+                playerNameLabel.setForeground(new Color(255, 255, 255));
+                playerNameLabel.setBackground(new Color(0, 0, 0));
+                playerNameLabel.setOpaque(true);
+                playerNameLabel.setFont(bestFont);
+                playerNameLabel.setBounds(225, 580, 200,40);
+                this.ingameScreen.add(playerNameLabel);
+            }
+            //player2
+            if (!Controller.getGameLoop().getPlayers()[1].isSquashed()) {
+                PlayerClass player = Controller.getGameLoop().getPlayers()[1];
+                JLabel playerLabel = new JLabel();
+                playerLabel.setBounds(530,160,250,250);
+                playerLabel.setIcon(player.getPlayerImage());
+                this.ingameScreen.add(playerLabel);
+
+                JLabel isSelectedLabel = new JLabel();
+                isSelectedLabel.setBounds(750,350,100,100);
+                if (player.isSelected()) {
+                    isSelectedLabel.setIcon(checkIcon);
+                } else {
+                    isSelectedLabel.setIcon(xIcon);
+                }
+
                 this.ingameScreen.add(isSelectedLabel);
             }
+            //player 3
+            if (!Controller.getGameLoop().getPlayers()[2].isSquashed()) {
+                PlayerClass player = Controller.getGameLoop().getPlayers()[2];
+                JLabel playerLabel = new JLabel();
+                playerLabel.setBounds(830,290,250,250);
+                playerLabel.setIcon(player.getPlayerImage());
+                this.ingameScreen.add(playerLabel);
+
+                JLabel isSelectedLabel = new JLabel();
+                isSelectedLabel.setBounds(1050,550,100,100);
+                if (player.isSelected()) {
+                    isSelectedLabel.setIcon(checkIcon);
+                } else {
+                    isSelectedLabel.setIcon(xIcon);
+                }
+
+                this.ingameScreen.add(isSelectedLabel);
+            }
+
+
+
         }
 
         JLabel backgroundImageIngame = new JLabel();
@@ -158,4 +283,5 @@ public class GUI extends JFrame{//This class is designed to be replaced by a GUI
     //Says who was squashed
     public static void squash(PlayerClass player){System.out.println(player+" was squashed...");}
 }
+
 
